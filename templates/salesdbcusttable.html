@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard.css') }}" type="text/css">
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="title">Absolut Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck1">
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck">
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+        <div class="top_right">
+          <div class="search">
+            <label for="btn" class="button">Select Dashboards
+              <ion-icon class="dropDown" name="caret-down-outline"></ion-icon>
+            </label>
+            <input type="checkbox" id="btn">
+            <ul class="drop">
+              <li><a href="{{ url_for('home') }}">Database</a></li>
+              <li>
+                <label for="btn-2" class="first">Adobe Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-2">
+                <ul>
+                  <li><a href="{{url_for('dashboard') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-3" class="second">Microsoft Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-3">
+                <ul>
+                  <li><a href="{{url_for('dashboardMs') }}">Main Dashboard</a></li>
+                  <!-- <li><a href="{{url_for('dashboard2') }}">Extra Dashboard</a></li> -->
+                </ul>
+              </li>
+              <li>
+                <label for="btn-5" class="second">Sales Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-5">
+                <ul>
+                  <li><a href="{{url_for('dashboardsales') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-6" class="second">Central DB Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-6">
+                <ul>
+                  <li><a href="{{url_for('dashboardCentralDB') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-4" class="first">Liscense Expiry Table
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-4">
+                <ul>
+                  <li><a href="{{url_for('dashboard2') }}">Adobe Lisence Expiry Table</a></li>
+                  <!-- <li><a href="{{url_for('dashboard3') }}">Microsoft Lisence Expiry Table</a></li> -->
+                </ul>
+              </li>
+              <li>
+            </ul>
+          </div>
+          <div class="user">
+            <a href="{{ url_for('dashboardsales') }}">
+              <ion-icon class="icon" name="refresh-outline"></ion-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="recentOrders">
+          <div class="cardHeader">
+            <h2>Customer Details Data</h2>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <td>
+                  <h2>
+                    Name
+                  </h2>
+                </td>
+                <td>
+                  <h2>
+                    Sales Count
+                  </h2>
+                </td>
+                <!-- <td>Contact E-mail</td> -->
+                <!-- <td>User_id</td> -->
+              </tr>
+            </thead>
+            <tbody id="myTable">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- <script src="{{ url_for('static', filename='./js/bar_chart.js') }}"></script> -->
+
+  <!-- show table with databse -->
+  <script>
+    async function cust_sale(e) {
+      let response = await fetch('/salessalesgraph?c=' + e);
+      let data = await response.json()
+      console.log(data);
+      for (var i = 0; i < data.values.length; i++) {
+        var row = ` <tr>
+                     <td>${data.labels[i]}</td>
+                     <td>${data.values[i]}</td>
+              </tr>`
+        document.getElementById("myTable").innerHTML += row;
+        // console.log(row);
+      }
+    }
+    cust_sale('sales_date');
+  </script>
+
+  <!-- show or remove button if admin -->
+  <script>
+    let box = document.getElementById("userCheck");
+    let box1 = document.getElementById("userCheck1");
+    let box2 = document.getElementById("userCheck2");
+    var out_html = '';
+    const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+    out_html = Object.values(myJSON1[0]);
+    if (out_html == 'admin') {
+      // console.log(out_html);
+      box.classList.remove('userCheck')
+      box1.classList.remove('userCheck')
+      box2.classList.remove('userCheck')
+    }
+    else {
+      console.log("not admin");
+    }
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseover', activeLink));
+  </script>
+</body>
+
+</html>

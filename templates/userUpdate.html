@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/updateuser.css') }}" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="accessibility-outline"></ion-icon>
+            </span>
+            <span class="title">Absolute Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck1">
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck">
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+      </div>
+      <div class="details">
+        <div class="recentOrders">
+          <div class="contentBx">
+            <div class="formBx">
+              <div class="message">{{message}}</div>
+              <form action="/userUpdate" method="POST">
+                <div class="inputBx">
+                  <span>User ID</span>
+                  <input type="text" id="user_id" class="login-field" value="" name="username" required>
+                </div>
+                <div class="inputBx">
+                  <span>Name</span>
+                  <input type="text" id="name" class="login-field" value="" name="name">
+                </div>
+                <div class="inputBx">
+                  <span>Email ID</span>
+                  <input type="text" id="email_id" class="login-field" value="" name="email_id">
+                </div>
+                <div class="inputBx">
+                  <span>Department</span>
+                  <input type="text" id="department" class="login-field" value="" name="department">
+                </div>
+                <div class="inputBx">
+                  <span>User Type</span>
+                  <input type="text" id="user_type" class="login-field" value="" name="user_type">
+                </div>
+                <div class="inputBx">
+                  <span>Contact No.</span>
+                  <input type="text" id="contact_no" class="login-field" value="" name="contact_no">
+                </div>
+                <div class="inputBx">
+                  <span>Password</span>
+                  <input type="password" id="password" onkeyup="check()" class="login-field pass" value=""
+                    name="password" required>
+                </div>
+                <div class="inputBx">
+                  <span class="register" for="email">Confirm Password <i class="fa fa-check"
+                      style="color:green; display:none" aria-hidden="true"></i> <i class="fa fa-times"
+                      style="color:red; display:none" aria-hidden="true"></i></span>
+                  <input type="password" id="confirm_password" onkeyup="check()" class="login-field cpass" value=""
+                    name="confirmpassword" required>
+                </div>
+                <div class="inputBx">
+                  <input type="submit" name="submit_button" id="submitr" value="Add User">
+                </div>
+                <div class="inputBx">
+                  <input type="submit" name="submit_button" id="updateusers" value="Update User">
+                </div>
+                <div class="inputBx">
+                  <input type="submit" name="submit_button" id="deleter" value="Delete User">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+  <script>
+    const userids = localStorage.getItem('userid');
+    const namevalues = localStorage.getItem('namevalue');
+    const emailids = localStorage.getItem('emailid');
+    const departments = localStorage.getItem('department');
+    const usertypes = localStorage.getItem('usertype');
+    const contactnos = localStorage.getItem('contactno');
+    const passwords = localStorage.getItem('password');
+    const confirmpasswords = localStorage.getItem('confirmpassword');
+    document.getElementById("user_id").value = userids;
+    document.getElementById("name").value = namevalues;
+    document.getElementById("email_id").value = emailids;
+    document.getElementById("department").value = departments;
+    document.getElementById("user_type").value = usertypes;
+    document.getElementById("contact_no").value = contactnos;
+    document.getElementById("password").value = passwords;
+    document.getElementById("confirm_password").value = confirmpasswords;
+  // document.getElementById('user_id').textContent = userids;
+  </script>
+
+  <script>
+    function check() {
+      let cpass = document.querySelector(".cpass")
+      let pass = document.querySelector(".pass")
+      if (cpass.value === pass.value && cpass.value && pass.value) {
+        document.querySelector(".fa-check").style.display = "inline"
+        document.querySelector(".fa-times").style.display = "none"
+        document.querySelector("#submitr").style.display = "inline"
+        document.querySelector("#updateusers").style.display = "inline"
+        document.querySelector("#deleter").style.display = "inline"
+      }
+      else {
+        document.querySelector(".fa-check").style.display = "none"
+        document.querySelector(".fa-times").style.display = "inline"
+        document.querySelector("#submitr").style.display = "none"
+        document.querySelector("#updateusers").style.display = "none"
+        document.querySelector("#deleter").style.display = "none"
+      }
+    }
+
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseclick', activeLink));
+  </script>
+  <!-- show or remove button if admin -->
+  <script>
+    let box = document.getElementById("userCheck");
+    let box1 = document.getElementById("userCheck1");
+    let box2 = document.getElementById("userCheck2");
+    var out_html = '';
+    const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+    out_html = Object.values(myJSON1[0]);
+    if (out_html == 'admin') {
+      // console.log(out_html);
+      box.classList.remove('userCheck')
+      box1.classList.remove('userCheck')
+      box2.classList.remove('userCheck')
+    }
+    else {
+      console.log("not admin");
+    }
+  </script>
+
+</body>
+
+</html>

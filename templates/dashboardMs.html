@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard.css') }}" type="text/css">
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="title">Absolut Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck1">
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck">
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+        <div class="user">
+          <div class="text">
+            <h3>Microsoft Dashboard</h3>
+          </div>
+        </div>
+        <div class="top_right">
+          <div class="search">
+            <label for="btn" class="button">Select Dashboards
+              <ion-icon class="dropDown" name="caret-down-outline"></ion-icon>
+            </label>
+            <input type="checkbox" id="btn">
+            <ul class="drop">
+              <li><a href="{{ url_for('home') }}">Database</a></li>
+              <li>
+                <label for="btn-2" class="first">Adobe Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-2">
+                <ul>
+                  <li><a href="{{url_for('dashboard') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-3" class="second">Microsoft Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-3">
+                <ul>
+                  <li><a href="{{url_for('dashboardMs') }}">Main Dashboard</a></li>
+                  <!-- <li><a href="{{url_for('dashboard2') }}">Extra Dashboard</a></li> -->
+                </ul>
+              </li>
+              <li>
+                <label for="btn-5" class="second">Sales Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-5">
+                <ul>
+                  <li><a href="{{url_for('dashboardsales') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-6" class="second">Central DB Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-6">
+                <ul>
+                  <li><a href="{{url_for('dashboardCentralDB') }}">Main Dashboard</a></li>
+                  <li><a href="{{url_for('unique_cust') }}">Unique Cust Dashboard</a></li>
+
+                </ul>
+              </li>
+              <li>
+                <label for="btn-4" class="first">Liscense Expiry Table
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-4">
+                <ul>
+                  <li><a href="{{url_for('dashboard2') }}">Adobe Lisence Expiry Table</a></li>
+                  <!-- <li><a href="{{url_for('dashboard3') }}">Microsoft Lisence Expiry Table</a></li> -->
+                </ul>
+              </li>
+              <li>
+            </ul>
+          </div>
+          <div class="user">
+            <a href="{{ url_for('dashboardMs') }}">
+              <ion-icon class="icon" name="refresh-outline"></ion-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cardBox">
+        <div class="card">
+          <div>
+            <div class="numbers" id="total_cust">0</div>
+            <div class="cardName">Total Customers</div>
+          </div>
+          <div class="iconBx">
+            <ion-icon name="analytics-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="card">
+          <div>
+            <div class="numbers" id="total_vip">0</div>
+            <div class="cardName">Total Distinct End Customers</div>
+          </div>
+          <div class="iconBx">
+            <ion-icon name="analytics-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="card">
+          <div>
+            <div class="numbers" id="flp_count">0</div>
+            <div class="cardName">Total Distinct Parent Id</div>
+          </div>
+          <div class="iconBx">
+            <ion-icon name="analytics-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="card">
+          <div>
+            <div class="numbers" id="tlp_count">0</div>
+            <div class="cardName">Total Distinct MPN_ID</div>
+          </div>
+          <div class="iconBx">
+            <ion-icon name="analytics-outline"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="graphBox">
+        <div class="box">
+          <canvas id="donought"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="myChart"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought2"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="myChart2"></canvas>
+        </div>
+      </div>
+
+      <!-- <div class="details">
+        <div class="recentOrders">
+          <div class="cardHeader">
+            <h2>Customer Liscense Expiry in Next 15 Days</h2>
+            <a href="{{url_for('dashboard3') }}" class="btn">View All</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <td>Liscense End Date</td>
+                <td>Product Type</td>
+                <td>Contact E-mail</td>
+                <td>User_id</td>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr>
+                <td>Adobe</td>
+                <td>Rs.500</td>
+                <td>VIP</td>
+                <td><span class="status delivered">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Adobe</td>
+                <td>Rs.500</td>
+                <td>FLP</td>
+                <td><span class="status inprogress">FLP</span></td>
+              </tr>
+              <tr>
+                <td>Adobe</td>
+                <td>Rs.500</td>
+                <td>TLP</td>
+                <td><span class="status pending">TLP</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> -->
+    </div>
+  </div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- <script src="{{ url_for('static', filename='./js/bar_chart.js') }}"></script> -->
+
+  <!-- show table with databse -->
+  <!-- <script>
+    async function cust_sale(e) {
+      let response = await fetch('/msdetailstable?c=' + e);
+      let data = await response.json()
+      // console.log(data);
+      for (var i = 0; i < 50; i++) {
+        var row = ` <tr>
+                     <td>${data.date[i]}</td>
+                     <td>${data.legend[i]}</td>
+                     <td>${data.labels[i]}</td>
+                    <td><span class="status pending">${data.values[i]}</span></td>
+              </tr>`
+        document.getElementById("myTable").innerHTML += row;
+        // console.log(row);
+      }
+    }
+    cust_sale('current_anniversary_date');
+  </script> -->
+
+  <!-- show or remove button if admin -->
+  <script>
+    let box = document.getElementById("userCheck");
+    let box1 = document.getElementById("userCheck1");
+    let box2 = document.getElementById("userCheck2");
+    var out_html = '';
+    const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+    out_html = Object.values(myJSON1[0]);
+    if (out_html == 'admin') {
+      // console.log(out_html);
+      box.classList.remove('userCheck')
+      box1.classList.remove('userCheck')
+      box2.classList.remove('userCheck')
+    }
+    else {
+      console.log("not admin");
+    }
+  </script>
+  <!-- total cust count -->
+  <script>
+    async function cust_count(e) {
+      let response = await fetch('/mssalescount?c=' + e);
+      let data = await response.json()
+      document.getElementById("total_cust").innerHTML = data.values;
+    }
+    async function distinct_count(e) {
+      let response = await fetch('/mssalescount?c=' + e);
+      let data = await response.json()
+      document.getElementById("total_vip").innerHTML = data.values;
+    }
+    async function distinct_count2(e) {
+      let response = await fetch('/mssalescount?c=' + e);
+      let data = await response.json()
+      document.getElementById("flp_count").innerHTML = data.values;
+    }
+    async function distinct_count3(e) {
+      let response = await fetch('/mssalescount?c=' + e);
+      let data = await response.json()
+      document.getElementById("tlp_count").innerHTML = data.values;
+    }
+    cust_count('total_ms_cust');
+    distinct_count('end_customer_organization_id');
+    distinct_count2('from_reseller_top_parent_id');
+    distinct_count3('mpn_id');
+  </script>
+  <!-- bar graph -->
+  <script>
+    const ctx = document.getElementById('myChart');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        datasets: [{
+          label: 'Month Wise Sales Record',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          showLine: true,
+          spanGaps: true
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/mssalesgraph?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChart.data.datasets[0].data.push(data.values[i]);
+        // myChart.data.labels.push(data.labels[i]);
+        myChart.update();
+      }
+    }
+    linechart('sales_date');
+
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd = document.getElementById('donought');
+    const myChartd = new Chart(ctxd, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/mspurchasetype?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd.data.datasets[0].data.push(data.values[i]);
+        myChartd.data.labels.push(data.labels[i]);
+        myChartd.update();
+      }
+    }
+    linechart('purchase_type');
+  </script>
+  <!-- bar graph -->
+  <script>
+    const ctx2 = document.getElementById('myChart2');
+    const myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Credited Region',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          showLine: true,
+          spanGaps: true
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/msproductdist?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChart2.data.datasets[0].data.push(data.values[i]);
+        myChart2.data.labels.push(data.labels[i]);
+        myChart2.update();
+      }
+    }
+    linechart('reported_subsegment');
+
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd2 = document.getElementById('donought2');
+    const myChartd2 = new Chart(ctxd2, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/msyearwisecount?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd2.data.datasets[0].data.push(data.values[i]);
+        myChartd2.data.labels.push(data.labels[i]);
+        myChartd2.update();
+      }
+    }
+    linechart('sales_date');
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseover', activeLink));
+  </script>
+</body>
+
+</html>

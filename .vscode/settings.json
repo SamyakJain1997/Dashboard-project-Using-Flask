@@ -1,0 +1,30 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "157.245.99.230",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Database",
+            "database": "aisplcdb",
+            "username": "aisplcdb",
+            "password": "Aisplcdb_987"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "157.245.99.230",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "aisplcdb_dev",
+            "database": "aisplcdb_dev",
+            "username": "aisplcdb",
+            "password": "Aisplcdb_987"
+        }
+    ]
+}

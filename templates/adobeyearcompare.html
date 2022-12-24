@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/login.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard_2.css') }}" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Year Wise Compare</title>
+</head>
+
+<body>
+  <section>
+    <div class="container">
+      <div class="navigation">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="title">Absolut Company Pvt.Ltd.</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard') }}">
+              <span class="icon">
+                <ion-icon name="home"></ion-icon>
+              </span>
+              <span class="title">Home</span>
+            </a>
+          </li>
+          <li class="userCheck" id="userCheck1">
+            <a href="{{ url_for('home') }}">
+              <span class="icon">
+                <ion-icon name="book"></ion-icon>
+              </span>
+              <span class="title">Data Source</span>
+            </a>
+          </li>
+          <li class="userCheck" id="userCheck">
+            <a href="{{ url_for('adminPanel') }}">
+              <span class="icon">
+                <ion-icon name="cog"></ion-icon>
+              </span>
+              <span class="title">Admin Pannel</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('dropsession') }}">
+              <span class="icon">
+                <ion-icon name="log-out"></ion-icon>
+              </span>
+              <span class="title">Sign Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="main">
+        <div class="topbar">
+          <div class="toggle">
+            <ion-icon name="menu-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="contentBx">
+          <div class="formBx">
+            <h2>Compare Year Wise</h2>
+            <form action="/adobeyearlist" method="POST">
+              <div class="inputBx">
+                <input type="number" id="year1" class="login-field" value="" name="year1" placeholder="Year 1" required>
+              </div>
+              <div class="inputBx">
+                <input type="number" id="year2" class="login-field" value="" name="year2" placeholder="Year 2" required>
+              </div>
+              <div class="inputBx">
+                <input type="submit" id="submitr" value="Submit" onclick="year_count()">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+  </section>
+</body>
+
+</html>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<script>
+  function year_count() {
+    const year1 = document.getElementById("year1").value;
+    const year2 = document.getElementById("year2").value;
+    localStorage.setItem('year1', year1);
+    localStorage.setItem('year2', year2);
+
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- show or remove button if admin -->
+<script>
+  let box = document.getElementById("userCheck");
+  let box1 = document.getElementById("userCheck1");
+  let box2 = document.getElementById("userCheck2");
+  var out_html = '';
+  const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+  out_html = Object.values(myJSON1[0]);
+  if (out_html == 'admin') {
+    // console.log(out_html);
+    box.classList.remove('userCheck')
+    box1.classList.remove('userCheck')
+    box2.classList.remove('userCheck')
+  }
+  else {
+    console.log("not admin");
+  }
+</script>
+
+
+
+
+<!-- navbar click -->
+<script>
+  let toggle = document.querySelector('.toggle');
+  let navigation = document.querySelector('.navigation');
+  let main = document.querySelector('.main');
+
+  toggle.onclick = function () {
+    navigation.classList.toggle('active');
+    main.classList.toggle('active');
+  }
+
+  let list = document.querySelectorAll('.navigation li');
+  function activeLink() {
+    list.forEach((items) =>
+      items.classList.remove('hovered'));
+    this.classList.add('hovered');
+  }
+  list.forEach((item) =>
+    item.addEventListener('mouseclick', activeLink));
+</script>
+
+<script>
+  function check() {
+    let cpass = document.querySelector(".cpass")
+    let pass = document.querySelector(".pass")
+    if (cpass.value === pass.value && cpass.value && pass.value) {
+      document.querySelector(".fa-check").style.display = "inline"
+      document.querySelector(".fa-times").style.display = "none"
+      document.querySelector("#submitr").style.display = "inline"
+    }
+    else {
+      document.querySelector(".fa-check").style.display = "none"
+      document.querySelector(".fa-times").style.display = "inline"
+      document.querySelector("#submitr").style.display = "none"
+    }
+  }
+
+</script>

@@ -1,0 +1,334 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.1/chart.min.js"
+    integrity="sha512-2uu1jrAmW1A+SMwih5DAPqzFS2PI+OPw79OVLS4NJ6jGHQ/GmIVDDlWwz4KLO8DnoUmYdU8hTtFcp8je6zxbCg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/main.css') }}" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard3.css') }}" type="text/css">
+
+</head>
+
+
+<title>AISPLCDB</title>
+
+<body>
+  <header>
+    <a href="{{ url_for('dashboard') }}" style="color:#4a1ee9;text-decoration: none;">
+      <p style="color:#4a1ee9;margin:15px 70px 15px 60px;"><i class="fa fa-bolt" aria-hidden="true"></i> AISPLCDB
+      </p>
+    </a>
+    <div style="display: none;">
+      First Name:<input type="text" name="fname" id="fname"><br><br>
+      First Name:<input type="text" name="lname" id="lname"><br><br>
+    </div>
+    <p class="header"></p>
+    <p class="download" onClick="downloadFile()"></p>
+    <p class="clearFilter" onClick="clearFilter()"></p>
+  </header>
+  <!-- <nav class="tableNames"></nav> -->
+  <div class="navigation">
+    <ul>
+      <li>
+        <a href="#">
+          <span class="title">Absolut Company Pvt.Ltd.</span>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('dashboard') }}">
+          <span class="icon">
+            <ion-icon name="home"></ion-icon>
+          </span>
+          <span class="title">Home</span>
+        </a>
+      </li>
+      <li class="userCheck" id="userCheck1">
+        <a href="{{ url_for('home') }}">
+          <span class="icon">
+            <ion-icon name="book"></ion-icon>
+          </span>
+          <span class="title">Data Source</span>
+        </a>
+      </li>
+      <li class="userCheck" id="userCheck">
+        <a href="{{ url_for('adminPanel') }}">
+          <span class="icon">
+            <ion-icon name="cog"></ion-icon>
+          </span>
+          <span class="title">Admin Pannel</span>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('dropsession') }}">
+          <span class="icon">
+            <ion-icon name="log-out"></ion-icon>
+          </span>
+          <span class="title">Sign Out</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tableInfo"></div>
+  <div class="terminal-window">
+
+    <table class="table123">
+      <thead>
+        <tr class="headersOfTable"></tr>
+      </thead>
+      <thead>
+        <tr class="iconsOfTable"></tr>
+      </thead>
+
+      <tbody style="cursor: pointer;" id="myTable" class="tablebody">
+      </tbody>
+
+    </table>
+    <div class="watcher"></div>
+    <div class="container">
+      <h1>Loading...</h1>
+    </div>
+  </div>
+</body>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+  var search = document.querySelectorAll('.search');
+  let tableName = ""
+  let counter = 0;
+  let timeout = null;
+  var controller;
+  var redundantRequests = 0
+  window.userData = ["database", "table", "nocolumn", "noword", counter];
+  var table = document.querySelector('.tablebody');
+  watcher = document.querySelector(".watcher")
+  loader = document.querySelector(".container")
+
+  database = document.querySelector(".database")
+  function clearFilter() {
+    let tableName
+    if (window.userData[1] === 'aisplcdb') { tableName = "AISPLCDB" }
+    // else if (window.userData[1] === 'oneaispl_portal_customers') { tableName = "ONEAISPL CUSTOMER CDB" }
+    else { tableName = window.userData[1] }
+    tableSelect(window.userData[1], tableName)
+  }
+  function showSearchfilter(e) {
+    e.parentNode.parentNode.childNodes[1].childNodes[1].style.display = "block";
+  }
+  function showSearchdrop(e) {
+    e.parentNode.parentNode.childNodes[1].childNodes[3].style.display = "block";
+  }
+  async function loadItems() {
+
+    let response1 = await fetch(`/custom_load_source?c=${window.userData}`)
+    let data1 = await response1.json().then(data1 => {
+      // console.log("data")
+      // console.log(data1)
+
+      table.insertAdjacentHTML("beforeend", data1);
+      window.userData[4] += 35;
+      loader.style.display = "none"
+      watcher.style.display = "none";
+    })
+  }
+
+  async function selectDatabase(e) {
+
+    window.userData[0] = e;
+    let response = await fetch(`/database?c=${window.userData[0]}`)
+    let string = "";
+    let data = await response.json().then(data => {
+      main = data["Tables_in_" + e]
+      Object.keys(main).forEach(ele => {
+        let tableName
+        if (main[ele] === 'adobe_cdb') { tableName = "ADOBE DB" }
+        else if (main[ele] === 'oneaispl_portal_customers') { tableName = "ONEAISPL P CUST DB" }
+        else if (main[ele] === 'oneaispl_portal_subscriptions') { tableName = "ONEAISPL P SUBS DB" }
+        else { tableName = main[ele] }
+        string = string + `<p onclick='tableSelect("${main[ele]}","${tableName}")'><i class="fa fa-table" aria-hidden="true"></i>${tableName}</p>`
+      })
+
+      string = string + ``
+    })
+  }
+  selectDatabase("aisplcdb");
+
+
+  async function tableSelect(e, name) {
+    // console.log(name)
+    document.querySelector(".terminal-window").style.display = "block"
+    if (name) { document.querySelector(".header").innerHTML = `TableName:   <span style="color:#FF083B;">${name}</span>` }
+    else { document.querySelector(".header").innerHTML = `TableName:   <span style="color:#FF083B;">${e}</span>` }
+
+    document.querySelector(".download").innerHTML = `Export to .CSV <i style="color:#FF083B;padding-left:5px"class="fa fa-download" aria-hidden="true"></i>`
+    document.querySelector(".clearFilter").innerHTML = `clearFilters <i class="fa fa-ban" style="color:#FF083B;padding-left:5px"aria-hidden="true"></i>`
+
+    if (document.querySelector('.tablebody').innerHTML.length > 13) {
+      document.querySelector('.tablebody').innerHTML = ""
+    }
+    let string = `<th class="realheader index">Index</th>`
+    let string2 = `<th class="realicon index"></th>`
+    let counterForLoop = 0
+
+    window.userData[4] = 0;
+    window.userData[5] = "sourceDB";
+    window.userData[3] = "noword";
+    window.userData[2] = "nocolumn";
+    window.userData[6] = localStorage.getItem('ref_id');
+    window.userData[7] = localStorage.getItem('source_db');
+
+    window.userData[1] = e;
+    let response = await fetch(`/custom_tableHeaders_source?c=${window.userData}`)
+    let data = await response.json().then(data => {
+      data.forEach(ele => {
+        string = string + `<th class="realheader">${ele} </th>`
+        string2 = string2 + `<th class="realicon ${counterForLoop}">
+                        <form>
+                            <div class="search id0"><input name="form" class="filter" type="text" autocomplete="off"
+                                    placeholder="filter" onkeyup='filterContent(this); valueCount(this)' /></div>
+                        </form>
+                    </th>`
+        counterForLoop += 1
+      })
+
+
+      document.querySelector(".headersOfTable").innerHTML = string;
+      document.querySelector(".iconsOfTable").innerHTML = string2;
+
+    })
+    watcher.style.display = "block";
+    watcher.style.width = (200 * (counterForLoop + 1) + 80).toString() + 'px'
+    intersectionObserver.observe(watcher)
+    let abab = await fetch(`/custom_tableInfo_source?c=${window.userData},${e}`)
+    let baba = await abab.text().then(ele => {
+      tableinfo1 = ele.split("/")
+      let tableData = `<p>Table Information</p>
+        <p class="rows" id= "rowscount">Number of Rows: ${tableinfo1[0]}</p>
+        <p>Number of Columns: ${counterForLoop + 1}</p>`
+      document.querySelector(".tableInfo").innerHTML = tableData;
+
+    })
+
+
+
+  }
+  const tablenamedisplay = localStorage.getItem('source_db');
+  tableSelect(tablenamedisplay, tablenamedisplay);
+  async function filterContent(e) {
+
+    if ((e.charCode || e.keyCode) === 13) {
+      e.preventDefault();
+    }
+    watcher.style.display = "none";
+    let index = e.parentNode.parentNode.parentNode.className
+    let columnName = document.getElementsByClassName('realheader')[Number(index.split(" ")[1]) + 1].textContent
+    window.userData[2] = columnName;
+    window.userData[3] = e.value;
+    window.userData[4] = counter;
+
+
+    table.innerHTML = "";
+
+    if (controller) {
+      controller.abort();
+    }
+    if (AbortController) {
+      controller = new AbortController();
+      var signal = controller.signal;
+    }
+    fetch(`/custom_load_source?c=${window.userData}`, { signal })
+      .then(function (response) {
+        // console.log("response", response);
+        response.json().then((data) => {
+          table.insertAdjacentHTML("beforeend", data);
+          window.userData[4] = 35;
+          watcher.style.display = "none";
+          // console.log(data);
+        })
+
+
+      })
+      .catch(function (e) {
+        if (e.name === "AbortError") {
+          redundantRequests++;
+          // console.log(redundantRequests)
+        }
+
+      })
+
+
+
+  }
+
+  async function valueCount(e) {
+    if ((e.charCode || e.keyCode) === 13) {
+      e.preventDefault();
+    }
+    watcher.style.display = "none";
+    let index = e.parentNode.parentNode.parentNode.className
+    let columnName = document.getElementsByClassName('realheader')[Number(index.split(" ")[1]) + 1].textContent
+    window.userData[2] = columnName;
+    window.userData[3] = e.value;
+    window.userData[4] = counter;
+
+
+    table.innerHTML = "";
+    // if (controller) {
+    //     controller.abort();
+    // }
+    // if (AbortController) {
+    //     controller = new AbortController();
+    //     var signal = controller.signal;
+    // }
+    let response = await fetch(`/custom_tableInfo_unique?c=${window.userData},${e}`);
+    let data = await response.text()
+    // console.log(data);
+    line = `Number of Rows: ${data}`
+    document.getElementById("rowscount").innerHTML = line;
+
+  }
+
+  async function downloadFile() {
+    document.querySelector(".download").innerHTML = `<span style="animation:fade 2s infinite;;">Exporting</span>`
+    await fetch(`/downloadFile?c=${window.userData}`).then(function (response) {
+      // returns a Headers{} object
+      response.blob().then(function (myBlob) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(myBlob);
+        link.download = "report.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        document.querySelector(".download").innerHTML = `Export to .CSV <i style="color:#FF083B;padding-left:5px"class="fa fa-download" aria-hidden="true"></i>`
+      });
+    });
+
+  }
+  var intersectionObserver = new IntersectionObserver(entries => {
+
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+    loadItems();
+  });
+
+
+</script>
+<!-- show or remove button if admin -->
+<script>
+  let box = document.getElementById("userCheck");
+  let box1 = document.getElementById("userCheck1");
+  let box2 = document.getElementById("userCheck2");
+  var out_html = '';
+  const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+  out_html = Object.values(myJSON1[0]);
+  if (out_html == 'admin') {
+    // console.log(out_html);
+    box.classList.remove('userCheck')
+    box1.classList.remove('userCheck')
+  }
+  else {
+    console.log("not admin");
+  }
+</script>

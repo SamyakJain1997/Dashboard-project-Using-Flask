@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard4.css') }}" type="text/css">
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="title">Absolut Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck1">
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck">
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+        <div class="user">
+          <div class="text">
+            <h3>Central DB Dashboard 2</h3>
+          </div>
+        </div>
+        <div class="top_right">
+          <div class="search">
+            <label for="btn" class="button">Select Dashboards
+              <ion-icon class="dropDown" name="caret-down-outline"></ion-icon>
+            </label>
+            <input type="checkbox" id="btn">
+            <ul class="drop">
+              <li><a href="{{ url_for('home') }}">Database</a></li>
+              <li>
+                <label for="btn-2" class="first">Adobe Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-2">
+                <ul>
+                  <li><a href="{{url_for('dashboard') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-3" class="second">Microsoft Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-3">
+                <ul>
+                  <li><a href="{{url_for('dashboardMs') }}">Main Dashboard</a></li>
+                  <!-- <li><a href="{{url_for('dashboard2') }}">Extra Dashboard</a></li> -->
+                </ul>
+              </li>
+              <li>
+                <label for="btn-5" class="second">Sales Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-5">
+                <ul>
+                  <li><a href="{{url_for('dashboardsales') }}">Main Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <label for="btn-6" class="second">Central DB Dashboard
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-6">
+                <ul>
+                  <li><a href="{{url_for('dashboardCentralDB') }}">Main Dashboard</a></li>
+                  <li><a href="{{url_for('unique_cust') }}">Unique Cust Dashboard</a></li>
+
+                </ul>
+              </li>
+              <li>
+                <label for="btn-4" class="first">Liscense Expiry Table
+                  <ion-icon class="dropDown2" name="caret-down-outline"></ion-icon>
+                </label>
+                <input type="checkbox" id="btn-4">
+                <ul>
+                  <li><a href="{{url_for('dashboard2') }}">Adobe Lisence Expiry Table</a></li>
+                  <!-- <li><a href="{{url_for('dashboard3') }}">Microsoft Lisence Expiry Table</a></li> -->
+                </ul>
+              </li>
+              <li>
+            </ul>
+          </div>
+          <div class="user">
+            <a href="{{ url_for('dashboardsales') }}">
+              <ion-icon class="icon" name="refresh-outline"></ion-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="graphBox">
+        <div class="box">
+          <canvas id="donought"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought2"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought3"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought4"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought5"></canvas>
+        </div>
+        <div class="box">
+          <canvas id="donought6"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- <script src="{{ url_for('static', filename='./js/bar_chart.js') }}"></script> -->
+
+  <!-- donought chart -->
+  <script>
+    const ctxd = document.getElementById('donought');
+    const myChartd = new Chart(ctxd, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)',
+            'rgba(245, 239, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)',
+            'rgba(245, 239, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_address?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd.data.datasets[0].data.push(data.values[i]);
+        myChartd.data.labels.push(data.labels[i]);
+        myChartd.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd2 = document.getElementById('donought2');
+    const myChartd2 = new Chart(ctxd2, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_count?c=' + e);
+      let data = await response.json()
+      console.log(data);
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd2.data.datasets[0].data.push(data.values[i]);
+        myChartd2.data.labels.push(data.labels[i]);
+        myChartd2.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd3 = document.getElementById('donought3');
+    const myChartd3 = new Chart(ctxd3, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_city?c=' + e);
+      let data = await response.json()
+      console.log(data);
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd3.data.datasets[0].data.push(data.values[i]);
+        myChartd3.data.labels.push(data.labels[i]);
+        myChartd3.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd4 = document.getElementById('donought4');
+    const myChartd4 = new Chart(ctxd4, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_spoc?c=' + e);
+      let data = await response.json()
+      console.log(data);
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd4.data.datasets[0].data.push(data.values[i]);
+        myChartd4.data.labels.push(data.labels[i]);
+        myChartd4.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd5 = document.getElementById('donought5');
+    const myChartd5 = new Chart(ctxd5, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_email?c=' + e);
+      let data = await response.json()
+      console.log(data);
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd5.data.datasets[0].data.push(data.values[i]);
+        myChartd5.data.labels.push(data.labels[i]);
+        myChartd5.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+  <!-- donought chart -->
+  <script>
+    const ctxd6 = document.getElementById('donought6');
+    const myChartd6 = new Chart(ctxd6, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '10 piece Data',
+          data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)',
+            'rgba(245, 239, 145, 1)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(245, 40, 145, 1)',
+            'rgba(245, 239, 145, 1)'
+          ],
+          borderWidth: 1,
+        }]
+      }
+    });
+    async function linechart(e) {
+      let response = await fetch('/unique_cust_phone?c=' + e);
+      let data = await response.json()
+      for (let i = 0; i < data.values.length; i++) {
+        myChartd6.data.datasets[0].data.push(data.values[i]);
+        myChartd6.data.labels.push(data.labels[i]);
+        myChartd6.update();
+      }
+    }
+    linechart('address_count');
+  </script>
+
+
+
+
+
+
+
+
+
+
+  <!-- show table with databse -->
+  <script>
+    async function cust_sale(e) {
+      let response = await fetch('/salestablecheck?c=' + e);
+      let data = await response.json()
+      // console.log(data);
+      for (var i = 0; i < 50; i++) {
+        var row = ` <tr>
+                     <td>${data.email[i]}</td>
+                     <td>${data.full_name[i]}</td>
+                     <td>check</td>
+                    <td><span class="status pending">check</span></td>
+              </tr>`
+        document.getElementById("myTable").innerHTML += row;
+        // console.log(row);
+      }
+    }
+    cust_sale('check_data');
+  </script>
+
+  <!-- show or remove button if admin -->
+  <script>
+    let box = document.getElementById("userCheck");
+    let box1 = document.getElementById("userCheck1");
+    let box2 = document.getElementById("userCheck2");
+    var out_html = '';
+    const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+    out_html = Object.values(myJSON1[0]);
+    if (out_html == 'admin') {
+      // console.log(out_html);
+      box.classList.remove('userCheck')
+      box1.classList.remove('userCheck')
+      box2.classList.remove('userCheck')
+    }
+    else {
+      console.log("not admin");
+    }
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseover', activeLink));
+  </script>
+</body>
+
+</html>

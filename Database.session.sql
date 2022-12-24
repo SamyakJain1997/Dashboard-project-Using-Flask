@@ -1,0 +1,12 @@
+-- SELECT * FROM aisplcdb.aispl_central_db WHERE ref_id in ('AISPL5000001183','AISPL3000000783');
+-- SELECT count(DISTINCT ref_id) from aisplcdb.aispl_central_db WHERE ref_id IS NOT NULL;
+-- SELECT COUNT(current_anniversary_date) from aisplcdb.adobe_cdb WHERE current_anniversary_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 15 DAY);
+-- SELECT COUNT(YEAR(current_anniversary_date)) FROM aisplcdb.adobe_cdb WHERE current_anniversary_date IS NOT NULL GROUP BY YEAR(current_anniversary_date) ORDER BY YEAR(current_anniversary_date) DESC;
+-- SELECT YEAR(current_anniversary_date) from aisplcdb.adobe_cdb LIMIT 10;
+-- DESCRIBE adobe_cdb;
+-- show tables
+-- SELECT * FROM aisplcdb.aispl_central_database limit 0,1
+-- SELECT COUNT(*), account_manager FROM aisplcdb.aispl_central_database WHERE account_manager IS NOT NULL GROUP BY account_manager ORDER BY COUNT(*) DESC;
+-- show tables;
+-- DROP TABLE 
+drop table 'Table'

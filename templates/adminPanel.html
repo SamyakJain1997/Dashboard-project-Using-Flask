@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/adminpanel.css') }}" type="text/css">
+
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="title">Absolut Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck1">
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li class="userCheck" id="userCheck">
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+
+      </div>
+      <div class="imgBx">
+        <div class="cardBox">
+          <a class="table_link" href="{{ url_for('doughnut') }}">
+            <div class="card">
+              <div>
+                <div class="numbers">User Management</div>
+              </div>
+              <div class="iconBx">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+            </div>
+          </a>
+          <a class="table_link" href="{{ url_for('uniqueCustDB') }}">
+            <div class="card">
+              <div>
+                <div class="numbers">Unique Cust DB</div>
+              </div>
+              <div class="iconBx">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+            </div>
+          </a>
+          <a class="table_link" href="{{ url_for('fileupload') }}">
+            <div class="card">
+              <div>
+                <div class="numbers">Upload Files to DB</div>
+              </div>
+              <div class="iconBx">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+            </div>
+          </a>
+          <!-- <a class="table_link" id="clicktoDisplay" onclick="DisplayQuery()">
+            <div class="card">
+              <div>
+                <div class="numbers">Custom Query View</div>
+              </div>
+              <div class="iconBx">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+            </div>
+          </a>
+          {{sql_query}} -->
+        </div>
+      </div>
+      <div class="message">
+        <p>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+        <ul class=flashes>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        </p>
+      </div>
+
+
+
+      <div id="uploadForm" class="uploadBox userCheck">
+        <div class="contentBx">
+          <div class="formBx">
+            <form action="/uploadfile" method="POST" enctype="multipart/form-data">
+              <div style="margin-bottom: 15px;">
+                <span>Upload File</span><br>
+                <br>
+                <select class="database">
+                  <option value="" selected disabled hidden>Choose TableName</option>
+                  <option value="oneaispl_portal_customers">oneaispl_portal_customers</option>
+                  <option value="crm_customer">crm_customer</option>
+                  <option value="tally_data_db">tally_data_db</option>
+                  <option value="aispl_sales_db">aispl_sales_db</option>
+                  <option value="aispl_ms_sales">aispl_ms_sales</option>
+                  <option value="adobe_cdb">adobe_cdb</option>
+                </select>
+                <br>
+                <br>
+                <input type="file" class="login-field" value="" name="file" autocomplete="off" required>
+              </div>
+              <div class="inputBx">
+                <input type="submit" name="submit_button" id="submitr" value="Upload File">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="queryform" class="uploadBox userCheck">
+        <div class="contentBx">
+          <div class="formBx">
+            <form action="/adminPanel" method="POST" enctype="multipart/form-data">
+              <div style="margin-bottom: 15px;">
+                <span>Write Query</span><br>
+                <br>
+                <input type="text" class="login-field" value="" name="code_name" autocomplete="off">
+              </div>
+              <div class="inputBx">
+                <input type="submit" name="submit_button" id="submitr" value="Run Query">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- show or remove button if admin -->
+  <script>
+    let box = document.getElementById("userCheck");
+    let box1 = document.getElementById("userCheck1");
+    let box2 = document.getElementById("userCheck2");
+    var out_html = '';
+    const myJSON1 = JSON.parse({{ final_list3 | tojson}});
+    out_html = Object.values(myJSON1[0]);
+    if (out_html == 'admin') {
+      // console.log(out_html);
+      box.classList.remove('userCheck')
+      box1.classList.remove('userCheck')
+      box2.classList.remove('userCheck')
+    }
+    else {
+      console.log("not admin");
+    }
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseclick', activeLink));
+  </script>
+  <script>
+    function DisplayUpload() {
+      let clicker = document.getElementById('clickDisplay');
+      let formBox = document.getElementById('uploadForm');
+      clicker.onclick = function () {
+        formBox.classList.toggle('userCheck');
+      }
+    }
+    function DisplayQuery() {
+      let clicker = document.getElementById('clicktoDisplay');
+      let formBox = document.getElementById('queryform');
+      clicker.onclick = function () {
+        formBox.classList.toggle('userCheck');
+      }
+    }
+  </script>
+</body>
+
+</html>

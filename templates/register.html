@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/updateuser.css') }}" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Absolut|Dashboard</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="title">Absolut Company Pvt.Ltd.</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dashboard') }}">
+            <span class="icon">
+              <ion-icon name="home"></ion-icon>
+            </span>
+            <span class="title">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('home') }}">
+            <span class="icon">
+              <ion-icon name="book"></ion-icon>
+            </span>
+            <span class="title">Data Source</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('adminPanel') }}">
+            <span class="icon">
+              <ion-icon name="cog"></ion-icon>
+            </span>
+            <span class="title">Admin Pannel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('dropsession') }}">
+            <span class="icon">
+              <ion-icon name="log-out"></ion-icon>
+            </span>
+            <span class="title">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+        </div>
+      </div>
+      <div class="details">
+        <div class="recentOrders">
+          <div class="contentBx">
+            <div class="formBx">
+              <div class="message">{{message}}</div>
+              <form action="/adduser" method="POST">
+                <div class="inputBx">
+                  <span>User ID</span>
+                  <input type="text" class="login-field" value="" name="username" required>
+                </div>
+                <div class="inputBx">
+                  <span>Name</span>
+                  <input type="text" class="login-field" value="" name="name" required>
+                </div>
+                <div class="inputBx">
+                  <span>Email ID</span>
+                  <input type="text" class="login-field" value="" name="email_id" required>
+                </div>
+                <div class="inputBx">
+                  <span>Department</span>
+                  <input type="text" class="login-field" value="" name="department" required>
+                </div>
+                <div class="inputBx">
+                  <span>User Type</span>
+                  <input type="text" class="login-field" value="" name="user_type" required>
+                </div>
+                <div class="inputBx">
+                  <span>Contact No.</span>
+                  <input type="text" class="login-field" value="" name="contact_no" required>
+                </div>
+                <div class="inputBx">
+                  <span>Password</span>
+                  <input type="password" onkeyup="check()" class="login-field pass" value="" name="password" required>
+                </div>
+                <div class="inputBx">
+                  <span class="register" for="email">Confirm Password <i class="fa fa-check"
+                      style="color:green; display:none" aria-hidden="true"></i> <i class="fa fa-times"
+                      style="color:red; display:none" aria-hidden="true"></i></span>
+                  <input type="password" onkeyup="check()" class="login-field cpass" value="" name="confirmpassword"
+                    required>
+                </div>
+                <div class="inputBx">
+                  <input type="submit" name="submit_button" id="submitr" value="Add User">
+                </div>
+                <div class="inputBx">
+                  <p>Return Home <a href="{{ url_for('dashboard') }}">Home</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+
+  <script>
+    function check() {
+      let cpass = document.querySelector(".cpass")
+      let pass = document.querySelector(".pass")
+      if (cpass.value === pass.value && cpass.value && pass.value) {
+        document.querySelector(".fa-check").style.display = "inline"
+        document.querySelector(".fa-times").style.display = "none"
+        document.querySelector("#submitr").style.display = "inline"
+        document.querySelector("#updateusers").style.display = "inline"
+        document.querySelector("#deleter").style.display = "inline"
+      }
+      else {
+        document.querySelector(".fa-check").style.display = "none"
+        document.querySelector(".fa-times").style.display = "inline"
+        document.querySelector("#submitr").style.display = "none"
+        document.querySelector("#updateusers").style.display = "none"
+        document.querySelector("#deleter").style.display = "none"
+      }
+    }
+
+  </script>
+  <!-- navbar click -->
+  <script>
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+      navigation.classList.toggle('active');
+      main.classList.toggle('active');
+    }
+
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink() {
+      list.forEach((items) =>
+        items.classList.remove('hovered'));
+      this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+      item.addEventListener('mouseclick', activeLink));
+  </script>
+
+</body>
+
+</html>

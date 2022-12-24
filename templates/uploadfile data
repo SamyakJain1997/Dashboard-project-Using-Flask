@@ -1,0 +1,393 @@
+<div class="containerr">
+                    <div class="wrapper">
+                        <div class="image">
+                           <img src="" alt="">
+                            <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" alt=""> -->
+                        </div>
+                        <div class="content">
+                            <div class="icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="text">
+                                No file chosen, yet!
+                            </div>
+                        </div>
+                        <div id="cancel-btn">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="file-name">
+                            File name here
+                        </div>
+                    </div>
+                    <button onclick="defaultBtnActive()" id="custom-btn">Choose a file</button>
+                    <input id="default-btn" type="file" hidden>
+                </div>
+
+                <script>
+                    const wrapper = document.querySelector(".wrapper");
+                    const fileName = document.querySelector(".file-name");
+                    const defaultBtn = document.querySelector("#default-btn");
+                    const customBtn = document.querySelector("#custom-btn");
+                    const cancelBtn = document.querySelector("#cancel-btn i");
+                    const img = document.querySelector("img");
+                    let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+                    function defaultBtnActive() {
+                        defaultBtn.click();
+                    }
+                    defaultBtn.addEventListener("change", function () {
+                        const file = this.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function () {
+                                const result = reader.result;
+                                img.src = result;
+                                wrapper.classList.add("active");
+                            }
+                            cancelBtn.addEventListener("click", function () {
+                                img.src = "";
+                                wrapper.classList.remove("active");
+                            })
+                            reader.readAsDataURL(file);
+                        }
+                        if (this.value) {
+                            let valueStore = this.value.match(regExp);
+                            fileName.textContent = valueStore;
+                        }
+                    });
+                </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Upload Excel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/dashboard.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styless.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <!-- <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}"> -->
+    <link rel="stylesheet" href="{{url_for('static',filename='myfont/css/all.min.css')}}">
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="title">Absolut Company Pvt.Ltd.</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('dashboard') }}">
+                        <span class="icon">
+                            <ion-icon name="home"></ion-icon>
+                        </span>
+                        <span class="title">Home</span>
+                    </a>
+                </li>
+                <li id="userCheck1">
+                    <a href="{{ url_for('home') }}">
+                        <span class="icon">
+                            <ion-icon name="book"></ion-icon>
+                        </span>
+                        <span class="title">Data Source</span>
+                    </a>
+                </li>
+                <li id="userCheck">
+                    <a href="{{ url_for('adminPanel') }}">
+                        <span class="icon">
+                            <ion-icon name="cog"></ion-icon>
+                        </span>
+                        <span class="title">Admin Pannel</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('dropsession') }}">
+                        <span class="icon">
+                            <ion-icon name="log-out"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="upload">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div style="background-color: aquamarine;" class="alert alert-{{category}}">{{message}}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="graphBox">
+                <div class="col-md-offset-3 col-md-5" style="margin-top:50px">
+                    <form action="/uploadfile" method="POST" enctype="multipart/form-data">
+                        <h3 class="page-header text-primary">Upload Excel File</h3>
+
+                        <div class="form-group">
+                            <label>Browse Excel/CSV File</label>
+                            <input type="file" class="form-control" value="" name="file" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-block" name="submit_button" id="submitr"
+                                value="Upload File">
+                        </div>
+                    </form>
+                </div>
+                {% if data %}
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-5">
+                        <h3 class="page-header text-primary "><span class="fa fa-image">View Excel File</span></h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Excel</th>
+                                    <th>Upload Data to Database</th>
+                                </tr>
+                            </thead>
+                            {% for res in data %}
+                            {% set i=loop.index %}
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center">{{i}}</td>
+                                    <td class="btn btn-primary btn-block">{{res}}</td>
+                                    <td>
+                                        <select onchange="selectDatabase(this.value)" class="database">
+                                            <option value="" selected disabled hidden>Choose TableName</option>
+                                            <option value="oneaispl_portal_customers">oneaispl_portal_customers</option>
+                                            <option value="crm_customer">crm_customer</option>
+                                            <option value="tally_data_db">tally_data_db</option>
+                                            <option value="aispl_sales_db">aispl_sales_db</option>
+                                            <option value="aispl_ms_sales">aispl_ms_sales</option>
+                                            <option value="adobe_cdb">adobe_cdb</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button>Update to DB</button>
+                                    </td>
+                                    <td>
+                                        <button>Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        
+
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+        <!-- navbar click -->
+        <script>
+            let toggle = document.querySelector('.toggle');
+            let navigation = document.querySelector('.navigation');
+            let main = document.querySelector('.main');
+
+            toggle.onclick = function () {
+                navigation.classList.toggle('active');
+                main.classList.toggle('active');
+            }
+
+            let list = document.querySelectorAll('.navigation li');
+            function activeLink() {
+                list.forEach((items) =>
+                    items.classList.remove('hovered'));
+                this.classList.add('hovered');
+            }
+            list.forEach((item) =>
+                item.addEventListener('mouseclick', activeLink));
+        </script>
+        <script>
+            window.userData = ["tablename", "filename", "databasex"];
+            async function selectDatabase(e) {
+
+                window.userData[0] = e;
+                console.log(window.userData[0]);
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $(".alert").hide(8000);
+            });
+        </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+.upload{
+  display: grid;
+  height: 100%;
+  place-items: center;
+  text-align: center;
+}
+.containerr{
+  height: 350px;
+  width: 430px;
+  position: relative;
+}
+.containerr .wrapper{
+  position: relative;
+  height: 300px;
+  width: 100%;
+  border-radius: 10px;
+  background: #fff;
+  border: 2px dashed #c2cdda;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.wrapper.active{
+  border: none;
+}
+.wrapper .image{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.wrapper .icon{
+  font-size: 100px;
+  color: #9658fe;
+}
+.wrapper .text{
+  font-size: 20px;
+  font-weight: 500;
+  color: #5B5B7B;
+}
+.wrapper #cancel-btn i{
+  position: absolute;
+  font-size: 20px;
+  right: 15px;
+  top: 15px;
+  color: #9658fe;
+  cursor: pointer;
+  display: none;
+}
+.wrapper.active:hover #cancel-btn i{
+  display: block;
+}
+.wrapper #cancel-btn i:hover{
+  color: #e74c3c;
+}
+.wrapper .file-name{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 18px;
+  color: #fff;
+  display: none;
+  background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+}
+.wrapper.active:hover .file-name{
+  display: block;
+}
+.containerr #custom-btn{
+  margin-top: 30px;
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+}

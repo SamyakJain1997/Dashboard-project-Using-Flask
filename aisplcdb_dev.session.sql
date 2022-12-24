@@ -1,0 +1,13 @@
+-- SHOW TABLES;
+-- SELECT 2022 FROM adobe_analysis_test limit 10;
+-- SELECT COUNT(*),2021,2022 from adobe_analysis_test GROUP BY '2021','2022';
+-- SELECT '2018', '2021', count(*) as qty 
+--  FROM adobe_analysis_test 
+--  GROUP BY '2018', '2021' HAVING count(*)> 1
+-- DESCRIBE adobe_analysis_test
+-- SELECT adobe_analysis_test.2021
+-- FROM adobe_analysis_test
+-- WHERE adobe_analysis_test.2021 = adobe_analysis_test.2022;
+-- SELECT COUNT(DISTINCT adobe_analysis_test.2022) FROM adobe_analysis_test 
+-- SELECT * FROM aisplcdb_dev.aispl_adobe_distinct WHERE (subscription_end_year REGEXP '2021'AND REGEXP '2022' )
+SELECT * FROM aisplcdb_dev.aispl_adobe_distinct WHERE (subscription_end_year REGEXP '2020') AND (subscription_end_year REGEXP '2022')

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Upload Excel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/fileupload.css') }}" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='./css/styless.css') }}"> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" /> -->
+    <!-- <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}"> -->
+    <!-- <link rel="stylesheet" href="{{url_for('static',filename='myfont/css/all.min.css')}}"> -->
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="title">Absolut Company Pvt.Ltd.</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('dashboard') }}">
+                        <span class="icon">
+                            <ion-icon name="home"></ion-icon>
+                        </span>
+                        <span class="title">Home</span>
+                    </a>
+                </li>
+                <li id="userCheck1">
+                    <a href="{{ url_for('home') }}">
+                        <span class="icon">
+                            <ion-icon name="book"></ion-icon>
+                        </span>
+                        <span class="title">Data Source</span>
+                    </a>
+                </li>
+                <li id="userCheck">
+                    <a href="{{ url_for('adminPanel') }}">
+                        <span class="icon">
+                            <ion-icon name="cog"></ion-icon>
+                        </span>
+                        <span class="title">Admin Pannel</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('dropsession') }}">
+                        <span class="icon">
+                            <ion-icon name="log-out"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="upload">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="message">{{message}}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="uploadpage">
+                <div class="col-md-offset-3 col-md-5" style="margin-top:50px">
+                    <form action="/uploadfile" method="POST" enctype="multipart/form-data">
+                        <!-- <h3 class="page-header text-primary">Upload Excel File</h3>
+
+                        <div class="form-group">
+                            <label>Browse Excel/CSV File</label>
+                            <input type="file" class="form-control" value="" name="file" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-block" name="submit_button" id="submitr"
+                                value="Upload File">
+                        </div> -->
+                        <input type="file" class="form-control" value="" name="file" autocomplete="off" required>
+                        <p>Drag your files here or click in this area.</p>
+                        <button type="submit" name="submit_button" id="submitr" value="Upload File">Upload</button>
+                    </form>
+                </div>
+                {% if data %}
+                <div class="row">
+                    <div class="details">
+                        <div class="recentOrders">
+                            <div class="cardHeader">
+                                <h2>View Excel File</h2>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td>S.No</td>
+                                        <td>Excel</td>
+                                        <td>Upload Data to Database</td>
+                                        <td>Update</td>
+                                        <td>Delete Record</td>
+                                    </tr>
+                                </thead>
+                                {% for res in data %}
+                                {% set i=loop.index %}
+                                <tr>
+                                    <td style="text-align:center">{{i}}</td>
+                                    <td class="btn btn-primary btn-block">{{res}}</td>
+                                    <td>
+                                        <select onchange="selectDatabase(this.value)" class="database">
+                                            <option value="" selected disabled hidden>Choose TableName</option>
+                                            <option value="oneaispl_portal_customers">oneaispl_portal_customers</option>
+                                            <option value="crm_customer">crm_customer</option>
+                                            <option value="tally_data_db">tally_data_db</option>
+                                            <option value="aispl_sales_db">aispl_sales_db</option>
+                                            <option value="aispl_ms_sales">aispl_ms_sales</option>
+                                            <option value="adobe_cdb">adobe_cdb</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button>Update to DB</button>
+                                    </td>
+                                    <td>
+                                        <button>Delete</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $('form input').change(function () {
+                    $('form p').text(this.files.length + " file(s) selected");
+                });
+            });
+        </script>
+
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+        <!-- navbar click -->
+        <script>
+            let toggle = document.querySelector('.toggle');
+            let navigation = document.querySelector('.navigation');
+            let main = document.querySelector('.main');
+
+            toggle.onclick = function () {
+                navigation.classList.toggle('active');
+                main.classList.toggle('active');
+            }
+
+            let list = document.querySelectorAll('.navigation li');
+            function activeLink() {
+                list.forEach((items) =>
+                    items.classList.remove('hovered'));
+                this.classList.add('hovered');
+            }
+            list.forEach((item) =>
+                item.addEventListener('mouseclick', activeLink));
+        </script>
+        <script>
+            window.userData = ["tablename", "filename", "databasex"];
+            async function selectDatabase(e) {
+
+                window.userData[0] = e;
+                console.log(window.userData[0]);
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $(".message").hide(8000);
+            });
+        </script>
+</body>
+
+</html>
